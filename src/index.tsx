@@ -1,12 +1,12 @@
 import {
-    ButtonItem,
+    ButtonItem, ConfirmModal,
     definePlugin,
-    Field,
+    Field, Focusable,
     NotchLabel,
     PanelSection,
     PanelSectionRow,
     ServerAPI,
-    ServerResponse,
+    ServerResponse, showModal,
     SliderField,
     Spinner,
     staticClasses,
@@ -150,6 +150,8 @@ const LookAheadNotchLabels: NotchLabel[] = [
     }
 ];
 
+const DeprecationWarningKey = "deprecation_warning";
+
 const Content: VFC<{ serverAPI: ServerAPI }> = ({serverAPI}) => {
 
     const [config, setConfig] = useState<Config>();
@@ -186,6 +188,35 @@ const Content: VFC<{ serverAPI: ServerAPI }> = ({serverAPI}) => {
         const dontShowAgainKeysRes: ServerResponse<string[]> = await serverAPI.callPluginMethod<{}, string[]>("retrieve_dont_show_again_keys", {});
         if (dontShowAgainKeysRes.success) {
             setDontShowAgainKeys(dontShowAgainKeysRes.result);
+            if (!dontShowAgainKeysRes.result.includes(DeprecationWarningKey)) {
+                showModal(<ConfirmModal
+                    strTitle={"Move to \"XR Gaming\" plugin"}
+                    strOKButtonText={"OK"}
+                    bAlertDialog={true}
+                    onOK={async () => await setDontShowAgain(DeprecationWarningKey)}>
+                        <Focusable focusWithinClassName="gpfocuswithin" onActivate={() => {}} noFocusRing={true}><p>
+                                SoooooOoOo, there's good news and bad news...
+                        </p></Focusable>
+                        <p>
+                            <b>The good?</b><br/>
+                            VITURE One support is ready! And Sideview mode is here.
+                        </p>
+                        <p>
+                            <b>The bad?</b><br/>
+                            Aerith dies at the end of Disc 1, so try not to get too attached.<br/>
+                            Oh, and the <i>XREAL Air Driver</i> plugin name doesn't make sense anymore. So this
+                            version of the plugin will soon be removed from the Decky store. To get the latest updates
+                            -- including full VITURE support and Sideview mode -- you'll need to:
+                            <ol style={{marginTop: 0, marginBottom: 10}}>
+                                <li>Uninstall the <b color={"gray"}>XREAL Air Driver</b> plugin</li>
+                                <li>Install the <b>XR Gaming</b> plugin</li>
+                            </ol>
+                        </p>
+                        <p>
+                            It should take only a minute to get back up and running. Enjoy!
+                        </p>
+                </ConfirmModal>);
+            }
         } else {
             setError(dontShowAgainKeysRes.result);
         }

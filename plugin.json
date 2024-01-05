@@ -4,7 +4,7 @@
   "flags": ["root"],
   "publish": {
     "tags": ["xreal", "root"],
-    "description": "Virtual display and head-tracking modes for the XREAL Air glasses",
-    "image": "https://raw.githubusercontent.com/wheaney/decky-xrealAir/main/assets/store_image.png"
+    "description": "Please install the \"XR Gaming\" plugin. This plugin is being removed from the Decky store.",
+    "image": "https://raw.githubusercontent.com/wheaney/decky-xrealAir/xrealAir/assets/store_image.png"
   }
 }
